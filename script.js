@@ -1,4 +1,9 @@
-const pianoKeys = document.querySelectorAll(".piano-keys .key")
+const pianoKeys = document.querySelectorAll(".piano-keys .key");
+
+volumeSlider = document.querySelector(".volume-slider input");
+
+keysCheckbox = document.querySelector(".keys-checkbox input");
+
 
 //setting up Audio//
 let allKeys = [],
@@ -8,7 +13,7 @@ audio = new Audio("/home/sabbath/Desktop/projos/virtual_piano/tunes/a.wav");
 const playTune = (key) => {
 	audio.src = `tunes/${key}.wav`; //passing audio src based on pressed key
 	audio.play(); //playing audio
-	console,log(allKeys);
+	console.log(allKeys);
 
 	const clickedKey = document.querySelector(`[data-key-"${key}"]`);
 	clickedKey.classList.add("active");
@@ -24,8 +29,27 @@ pianoKeys.forEach(key => {
 	key.addEventListener("click", () => playTune(key.dataset.key));
 });
 
-const pressdKey = (e) => {
-	playTune(e.key);
+
+
+const handleVolume = (e) => {
+	audio.volume = e.target.value; //passing the range slider value as an audio volume
+}
+
+
+
+const showHideKeys = () => {
+	//toggling hide class from each key on the checkbox click
+	pianoKeys.forEach(key => key.classList.toggle("hide"));
+}
+
+
+
+
+const pressedKey = (e) => {
+	if (allKeys.includes(e.key)) playTune(e.key);
 }
  
-document.addEventListener("keydown", pressdKey);
+
+keysCheckbox.addEventListener("click", showHideKeys);
+volumeSlider.addEventListener("input", handleVolume);
+document.addEventListener("keydown", pressedKey);
